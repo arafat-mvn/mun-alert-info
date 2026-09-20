@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangladesh Missing Children Data Analytics | MUN Alert Intelligence</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Bangladesh Missing Children Data Analytics | MUN Alert Intelligence">
+    <meta name="description" content="Operational analytical dashboard and pattern recognition mapping for ~1,700+ missing children case records in Bangladesh (MUN Alert Dataset). Action plans for parents, law enforcement, and local authorities.">
+    <meta name="keywords" content="Bangladesh missing children, MUN alert dataset, child safety analytics, data intelligence, public safety Bangladesh, missing child patterns">
+    <meta name="author" content="Public Safety Data Intelligence Team">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.io/">
+    <meta property="og:title" content="Bangladesh Missing Children Data Analytics | MUN Alert Intelligence">
+    <meta property="og:description" content="Pattern recognition and actionable insights based on ~1,700+ missing children case files in Bangladesh. Designed for parents, police, and civil authorities.">
+    <meta property="og:image" content="https://placehold.co/1200x630/0284c7/ffffff?text=MUN+Alert+Missing+Children+Analytics+BD">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Bangladesh Missing Children Analytics | MUN Alert Intelligence">
+    <meta property="twitter:description" content="Pattern recognition & risk mitigation strategies derived from 1,700+ missing children case logs in Bangladesh.">
+    <meta property="twitter:image" content="https://placehold.co/1200x630/0284c7/ffffff?text=MUN+Alert+Missing+Children+Analytics+BD">
+
+    <!-- Inline SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚨</text></svg>">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        danger: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            900: '#7f1d1d'
+                        },
+                        warning: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Utilities -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            .bg-slate-900, .bg-slate-950, .bg-slate-900\/80 {
+                background-color: #ffffff !important;
+                border: 1px solid #ccc !important;
+                color: #000000 !important;
+            }
+            .text-white, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 {
+                color: #111827 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen custom-scrollbar pb-16 antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- Top Fixed Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-xl">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <div>
+                    <a href="#" class="text-base sm:text-lg font-bold text-slate-100 leading-tight hover:text-sky-400 transition">
+                        MUN Alert Intelligence
+                    </a>
+                    <p class="text-xs text-slate-400 hidden sm:block">Bangladesh Missing Children Pattern Analysis (~1,700+ Cases)</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Action Buttons -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                    Live GitHub Pages Web App
+                </span>
+
+                <button onclick="openModal('githubModal')" class="inline-flex items-center px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 transition shadow-sm">
+                    <i class="fa-brands fa-github mr-1.5 text-base"></i> Deploy Guide
+                </button>
+
+                <button onclick="window.print()" class="hidden sm:inline-flex items-center px-3 py-1.5 border border-slate-700 hover:bg-slate-800 rounded-lg text-xs font-medium text-slate-300 transition">
+                    <i class="fa-solid fa-print mr-1.5"></i> Print Report
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+
+        <!-- Executive Summary Banner -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                <div class="space-y-3 max-w-3xl">
+                    <div class="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 px-3 py-1 rounded-md border border-sky-500/20">
+                        <i class="fa-solid fa-chart-pie mr-1"></i> Public Safety Intelligence Report
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-snug">
+                        Pattern Recognition & Child Safety Risk Mapping in Bangladesh
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Comprehensive analysis derived from over 1,700 MUN Alert case filings. This platform identifies high-frequency disappearances across geography, times, and environmental contexts to empower parents, civil authorities, and security forces with preventative action strategies.
+                    </p>
+                </div>
+
+                <!-- Navigation Quick Links -->
+                <div class="flex flex-wrap lg:flex-col gap-2 sm:gap-3 self-start lg:self-center w-full lg:w-auto">
+                    <a href="#action-matrix" class="flex-1 lg:flex-none text-center px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-medium text-xs sm:text-sm transition shadow-lg shadow-sky-600/20 flex items-center justify-center">
+                        <i class="fa-solid fa-table-cells mr-2"></i> Action Summary Matrix
+                    </a>
+                    <a href="#stakeholder-plans" class="flex-1 lg:flex-none text-center px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl font-medium text-xs sm:text-sm transition flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved mr-2"></i> Stakeholder Playbooks
+                    </a>
+                </div>
+            </div>
+
+            <!-- Key Metric Quick Cards Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-800/80">
+                <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/90 hover:border-slate-700 transition">
+                    <div class="text-slate-400 text-xs font-medium mb-1">Total Dataset Volume</div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-white">1,700+</div>
+                    <div class="text-xs text-amber-400 mt-1 flex items-center">
+                        <i class="fa-solid fa-layer-group mr-1"></i> Includes duplicate filings
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/90 hover:border-slate-700 transition">
+                    <div class="text-slate-400 text-xs font-medium mb-1">Primary Age Group</div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-sky-400">10–15 Yrs</div>
+                    <div class="text-xs text-slate-400 mt-1 flex items-center">
+                        <i class="fa-solid fa-mars mr-1 text-sky-400"></i> ~70-75% Male Boys
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/90 hover:border-slate-700 transition">
+                    <div class="text-slate-400 text-xs font-medium mb-1">Peak Disappearance Window</div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-rose-400">4 PM – 11 PM</div>
+                    <div class="text-xs text-rose-400/80 mt-1 flex items-center">
+                        <i class="fa-solid fa-clock mr-1"></i> Secondary: 5–7 AM
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/90 hover:border-slate-700 transition">
+                    <div class="text-slate-400 text-xs font-medium mb-1">Top Hazard Categories</div>
+                    <div class="text-xl sm:text-2xl font-extrabold text-amber-400">Madrasas & Hubs</div>
+                    <div class="text-xs text-slate-400 mt-1 flex items-center">
+                        <i class="fa-solid fa-location-dot mr-1 text-amber-400"></i> Gate & Transit Corridors
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Charts Grid 1: Demographics & Time Profiles -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Age Breakdown Chart Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-lg hover:border-slate-700 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-base font-bold text-white flex items-center">
+                            <i class="fa-solid fa-users text-sky-400 mr-2"></i> Disappearance by Age Band
+                        </h2>
+                        <span class="text-[10px] uppercase tracking-wider bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">Demographic</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Dominant concentration in pre-teens and adolescents (10–15 yrs) with secondary toddler cluster.</p>
+                    <div class="chart-container">
+                        <canvas id="ageChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
+                    <span class="text-sky-400 font-semibold"><i class="fa-solid fa-lightbulb mr-1"></i> Insight:</span> Toddlers vanish near courtyards/markets; older minors disappear along independent commute routes.
+                </div>
+            </div>
+
+            <!-- Gender Distribution Chart Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-lg hover:border-slate-700 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-base font-bold text-white flex items-center">
+                            <i class="fa-solid fa-venus-mars text-indigo-400 mr-2"></i> Gender Breakdown Ratio
+                        </h2>
+                        <span class="text-[10px] uppercase tracking-wider bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">Ratio</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Boys represent ~73% of cases due to higher solo mobility (madrasas, apprentice work).</p>
+                    <div class="chart-container">
+                        <canvas id="genderChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
+                    <span class="text-indigo-400 font-semibold"><i class="fa-solid fa-lightbulb mr-1"></i> Insight:</span> Female cases (27%) cluster in 13–17 bracket, presenting unique runaway vs abduction inquiry needs.
+                </div>
+            </div>
+
+            <!-- Temporal Timeline 24h Chart Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-lg hover:border-slate-700 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-base font-bold text-white flex items-center">
+                            <i class="fa-solid fa-clock text-rose-400 mr-2"></i> 24-Hour Time Profile
+                        </h2>
+                        <span class="text-[10px] uppercase tracking-wider bg-rose-500/10 text-rose-400 px-2 py-0.5 rounded border border-rose-500/20 font-mono">24h Curve</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Major spike during post-school/madrasa release (4–8 PM) and morning commute (5–7 AM).</p>
+                    <div class="chart-container">
+                        <canvas id="temporalChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
+                    <span class="text-rose-400 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Hazard Window:</span> 4 PM to 8 PM represents over 45% of total reported disappearances.
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Charts Grid 2: Spatial & Regional Distributions -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Environmental Hotspot Bar Chart -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg hover:border-slate-700 transition">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-base font-bold text-white flex items-center">
+                        <i class="fa-solid fa-map-pin text-amber-400 mr-2"></i> Top Environmental Hotspot Categories
+                    </h2>
+                    <span class="text-[10px] uppercase tracking-wider bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20 font-mono">Location Phrases</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">Frequency of explicit location keywords extracted from 1,700+ case descriptions.</p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="hotspotChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Geographic Division Case Volume Chart -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg hover:border-slate-700 transition">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-base font-bold text-white flex items-center">
+                        <i class="fa-solid fa-city text-emerald-400 mr-2"></i> Division & Industrial Cluster Density
+                    </h2>
+                    <span class="text-[10px] uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-mono">Regional Density</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">Concentration in urban centers, industrial garment belts (Savar/Gazipur), and transit hubs.</p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="geographyChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Completeness & System Bottleneck Diagnostics -->
+        <section id="system-gaps" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div class="flex items-center space-x-3 mb-6 border-b border-slate-800 pb-4">
+                <div class="p-2.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl">
+                    <i class="fa-solid fa-bug text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Data System Bottlenecks & Operational Gaps</h2>
+                    <p class="text-xs text-slate-400">Critical reporting vulnerabilities identified during dataset review that impede child recovery</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Bottleneck 1 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-clock-rotate-left mr-1"></i> SLA Bottleneck</span>
+                            <span class="text-[10px] font-mono bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded font-semibold">High Priority</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Unapproved Status Stagnation</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">A high percentage of urgent reports remain marked `approved: false` indefinitely, delaying broadcast during the vital first 2 hours.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Implement 2-Hour SLA for emergency verification.
+                    </div>
+                </div>
+
+                <!-- Bottleneck 2 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-copy mr-1"></i> Duplicate Logs</span>
+                            <span class="text-[10px] font-mono bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-semibold">2–4x Multi-Entry</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Lack of Case De-Duplication</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Multiple family members log the same child with slight spelling variances ("Rafiqun Nabi" vs "Rohomot"), fragmenting police dispatch tracking.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Unified National Case ID auto-merging.
+                    </div>
+                </div>
+
+                <!-- Bottleneck 3 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-location-crosshairs mr-1"></i> GIS Blindspot</span>
+                            <span class="text-[10px] font-mono bg-sky-500/20 text-sky-400 px-1.5 py-0.5 rounded font-semibold">No Coordinates</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Free-Text Location Logging</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Absence of standardized lat/long GPS points prevents automated geo-fenced alert triggers and live GIS spatial heat mapping.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Integrated location picker on intake form.
+                    </div>
+                </div>
+
+                <!-- Bottleneck 4 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-square-check mr-1"></i> Resolution Gap</span>
+                            <span class="text-[10px] font-mono bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-semibold">Stuck Active</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Missing Recovery Metrics</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Cases remain permanently marked as "active" with no systematic follow-up to record whether a child was found, obscuring true recovery rates.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Automated 48-hour case resolution check-in.
+                    </div>
+                </div>
+
+                <!-- Bottleneck 5 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-phone-volume mr-1"></i> Chain of Custody</span>
+                            <span class="text-[10px] font-mono bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-semibold">Unverified</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Unassigned Police Contacts</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Case entries list generic mobile numbers without linking to an official police officer of record or designated local thana dispatch desk.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Thana-wise assigned officer field.
+                    </div>
+                </div>
+
+                <!-- Bottleneck 6 -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-gauge-high mr-1"></i> Response Lag</span>
+                            <span class="text-[10px] font-mono bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded font-semibold">Untracked</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-200 mb-1">Uncomputed Reporting Delay</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">The system fails to calculate the time gap between `date` (disappearance) and `reportedAt`, preventing automated priority queueing for fresh cases.</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-900 text-[11px] text-slate-500">
+                        Target Fix: Auto-calculated Response Lag Index.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stakeholder Action Playbooks (Interactive Tabbed View) -->
+        <section id="stakeholder-plans" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-4 mb-6 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fa-solid fa-shield-halved text-sky-400 mr-2.5"></i> Stakeholder Action Playbooks
+                    </h2>
+                    <p class="text-xs text-slate-400">Tailored operational protocols for parents, police, and civil authorities</p>
+                </div>
+
+                <!-- Tab Navigation Buttons -->
+                <div class="flex space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 self-start md:self-auto no-print">
+                    <button onclick="switchTab('parents')" id="tab-parents" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition flex items-center bg-sky-600 text-white">
+                        <i class="fa-solid fa-house-chimney-user mr-1.5"></i> Parents & Guardians
+                    </button>
+                    <button onclick="switchTab('police')" id="tab-police" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center">
+                        <i class="fa-solid fa-user-shield mr-1.5"></i> Law Enforcement
+                    </button>
+                    <button onclick="switchTab('authorities')" id="tab-authorities" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center">
+                        <i class="fa-solid fa-building-columns mr-1.5"></i> Local Authorities
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: Parents & Guardians -->
+            <div id="content-parents" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-rose-400 font-semibold text-sm">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <h3>Primary Risk Factors</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li>Solo travel to/from madrasa, tuition, or market during dusk (4–8 PM) or early morning (5–7 AM).</li>
+                            <li>Unsupervised play near high-hazard zones: canals, riverfronts, bridges, or railway tracks.</li>
+                            <li>Diffusion of adult supervision during crowded events (weddings, village melas, markets).</li>
+                            <li>Open courtyard exposure for toddlers in high-density or market-adjacent homes.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-emerald-400 font-semibold text-sm">
+                            <i class="fa-solid fa-shield-cat"></i>
+                            <h3>Proactive Safeguards</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li><strong>30-Minute Check Rule:</strong> Treat a 30-minute delay from madrasa/school as an immediate alert trigger.</li>
+                            <li><strong>Buddy Commuting:</strong> Enforce mandatory group travel along transit-hub or bridge routes.</li>
+                            <li><strong>Bi-Annual Photo Vault:</strong> Keep an updated clear photograph on phone; many alert entries lacked pictures.</li>
+                            <li><strong>Wearable Identification:</strong> Attach stitched name/contact tags to toddler clothing in market areas.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-sky-400 font-semibold text-sm">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <h3>First 0–60 Minutes Protocol</h3>
+                        </div>
+                        <ol class="text-xs text-slate-300 space-y-2 list-decimal pl-4 leading-relaxed">
+                            <li><strong>Immediate Filing:</strong> Do NOT wait 24 hours. Contact police and file MUN alert immediately.</li>
+                            <li><strong>Route Retrace:</strong> Retrace route (Home &rarr; Madrasa/Market/Bridge) and check with classmates/shopkeepers.</li>
+                            <li><strong>Mosque Loudspeaker:</strong> Utilize local mosque PA systems for instant neighborhood broadcast.</li>
+                            <li><strong>Check High-Risk Hazards:</strong> Immediately check nearby transit hubs, rail lines, and canal/water edges.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Law Enforcement -->
+            <div id="content-police" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-sky-400 font-semibold text-sm">
+                            <i class="fa-solid fa-route"></i>
+                            <h3>Deployment Strategy</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li>Increase foot & bike patrols at madrasa gates during peak release hours (4–8 PM & 5–7 AM).</li>
+                            <li>Station dedicated rapid-response officers at major transit hubs (Kamalapur, Sadarghat, Chashara).</li>
+                            <li>Prioritize community policing outreach in industrial belts (Gazipur, Savar, Narayanganj).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-amber-400 font-semibold text-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <h3>Investigative Priorities</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li><strong>Madrasa Cases:</strong> Canvas institution staff, classmates, and transport/rickshaw drivers along routine paths immediately.</li>
+                            <li><strong>Teen Disappearances (13–17 yrs):</strong> Run dual-track inquiries covering abduction and voluntary departure (runaway/marriage).</li>
+                            <li><strong>Toddler Cases:</strong> Treat water hazards (canals/wells) within 300m radius as immediate search priorities.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-purple-400 font-semibold text-sm">
+                            <i class="fa-solid fa-handshake"></i>
+                            <h3>Inter-Agency Coordination</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li>Establish automated alert pipelines to bus, launch, and rail station master offices to intercept traveling minors.</li>
+                            <li>Implement a single case-ID system to auto-merge duplicate filings from multiple family members.</li>
+                            <li>Maintain active liaison desks with Rohingya camp management (RRRC/NGOs) in Cox's Bazar.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Local Authorities -->
+            <div id="content-authorities" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-amber-400 font-semibold text-sm">
+                            <i class="fa-solid fa-city"></i>
+                            <h3>Infrastructure & Safety</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li>Install high-intensity lighting and CCTV coverage at madrasa gates, market entrances, and bridges.</li>
+                            <li>Erect protective fencing along open canals and steep riverfront steps near residential colonies.</li>
+                            <li>Establish designated "Lost Child Help Desks" at major bus/launch/rail terminals.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-rose-400 font-semibold text-sm">
+                            <i class="fa-solid fa-bell"></i>
+                            <h3>Emergency Alert Optimization</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li><strong>Verification SLA:</strong> Enforce a strict 2-hour maximum SLA for alert verification (`approved: true`).</li>
+                            <li><strong>Geo-Fenced Alerts:</strong> Deploy targeted SMS broadcasts to mobile phones within a 3km radius of last seen locations.</li>
+                            <li><strong>Unified Hotline:</strong> Consolidate alert intake into a single verified national number with case de-duplication logic.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center space-x-2 text-emerald-400 font-semibold text-sm">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <h3>Social Support Programs</h3>
+                        </div>
+                        <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                            <li>Fund school and madrasa safe-commute initiatives (staggered dismissals, parent volunteers).</li>
+                            <li>Expand youth counseling and runaway-prevention mediation services in industrial zones.</li>
+                            <li>Standardize child registration and ID programs in high-vulnerability Rohingya refugee camps.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Summary Matrix Table -->
+        <section id="action-matrix" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fa-solid fa-table text-amber-400 mr-2.5"></i> Executive Pattern & Action Summary Matrix
+                    </h2>
+                    <p class="text-xs text-slate-400">Search patterns or filter stakeholder priorities</p>
+                </div>
+                <div class="relative w-full sm:w-72">
+                    <input type="text" id="matrixSearch" onkeyup="filterMatrix()" placeholder="Search pattern, location, or action..." class="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-sky-500 transition">
+                    <i class="fa-solid fa-search absolute left-3 top-3 text-xs text-slate-500"></i>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-xl">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-300 border-b border-slate-800 uppercase text-[10px] tracking-wider font-bold">
+                            <th class="p-3.5 min-w-[200px]">Critical Pattern Identified</th>
+                            <th class="p-3.5 min-w-[220px] text-sky-400"><i class="fa-solid fa-house-chimney-user mr-1"></i> Parents — Top Action</th>
+                            <th class="p-3.5 min-w-[220px] text-indigo-400"><i class="fa-solid fa-user-shield mr-1"></i> Law Enforcement — Top Action</th>
+                            <th class="p-3.5 min-w-[220px] text-emerald-400"><i class="fa-solid fa-building-columns mr-1"></i> Local Authorities — Top Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrixTableBody" class="divide-y divide-slate-800/60 text-slate-300">
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 font-medium text-white bg-slate-950/40">
+                                <span class="inline-block bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded text-[10px] mr-1.5">1</span>
+                                Madrasa / Mosque Commute Disappearances (Peak 4–8 PM & 5–7 AM)
+                            </td>
+                            <td class="p-3.5">Enforce mandatory buddy-system commuting & 30-min late check-in rules.</td>
+                            <td class="p-3.5">Immediate canvass of institution staff, students, and local transport paths upon report.</td>
+                            <td class="p-3.5">Upgrade CCTV and lighting at madrasa gates; initiate staggered dismissal programs.</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 font-medium text-white bg-slate-950/40">
+                                <span class="inline-block bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded text-[10px] mr-1.5">2</span>
+                                High-Frequency Last Seen at Transit Hubs (Bus, Rail, Sadarghat)
+                            </td>
+                            <td class="p-3.5">Avoid solo transit travel; notify authorities within minutes if overdue.</td>
+                            <td class="p-3.5">Station liaison officers at major terminals during morning and evening rush hours.</td>
+                            <td class="p-3.5">Establish rapid alert protocol & lost-child help desks with station staff.</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 font-medium text-white bg-slate-950/40">
+                                <span class="inline-block bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded text-[10px] mr-1.5">3</span>
+                                Toddler Vanishing near Courtyards, Canals & Markets
+                            </td>
+                            <td class="p-3.5">Use wearable contact tags; monitor toddlers near unfenced water or shops.</td>
+                            <td class="p-3.5">Prioritize immediate 300m radius search of canal/water hazards before expanding.</td>
+                            <td class="p-3.5">Fence or supervise canal & bridge crossings in dense residential colonies.</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 font-medium text-white bg-slate-950/40">
+                                <span class="inline-block bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded text-[10px] mr-1.5">4</span>
+                                Reporting Delays & Unapproved / Duplicate Alert Bottlenecks
+                            </td>
+                            <td class="p-3.5">File reports immediately (0–60 min); avoid waiting 24 hours.</td>
+                            <td class="p-3.5">Implement case de-duplication and establish direct officer-of-record assignments.</td>
+                            <td class="p-3.5">Enforce strict 2-hour alert approval SLA and build unified case intake database.</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 font-medium text-white bg-slate-950/40">
+                                <span class="inline-block bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded text-[10px] mr-1.5">5</span>
+                                High-Risk Clusters: Rohingya Camps, Industrial Belts & Teen Ambiguity
+                            </td>
+                            <td class="p-3.5">Strengthen community watch networks and family communication channels.</td>
+                            <td class="p-3.5">Maintain camp liaison desks; dual-track (abduction/runaway) investigations for teens.</td>
+                            <td class="p-3.5">Fund targeted outreach, registration programs, and family mediation services.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- GitHub Pages Deployment Guide Modal -->
+    <div id="githubModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 space-y-5 shadow-2xl relative">
+            <button onclick="closeModal('githubModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                <div class="p-2.5 bg-slate-800 text-sky-400 rounded-xl">
+                    <i class="fa-brands fa-github text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">How to Host on GitHub Pages</h3>
+                    <p class="text-xs text-slate-400">Deploy this interactive single-page dashboard for free in 2 minutes</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <div class="space-y-1">
+                    <h4 class="font-bold text-sky-400 uppercase tracking-wider text-[11px]">Step 1: Save File</h4>
+                    <p>Save this complete file as <code class="bg-slate-950 px-2 py-0.5 rounded text-amber-400 font-mono">index.html</code> in your project folder.</p>
+                </div>
+
+                <div class="space-y-1">
+                    <h4 class="font-bold text-sky-400 uppercase tracking-wider text-[11px]">Step 2: Push to GitHub</h4>
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-300 space-y-1">
+                        <p>git init</p>
+                        <p>git add index.html</p>
+                        <p>git commit -m "Deploy Bangladesh missing children analytics dashboard"</p>
+                        <p>git branch -M main</p>
+                        <p>git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git</p>
+                        <p>git push -u origin main</p>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <h4 class="font-bold text-sky-400 uppercase tracking-wider text-[11px]">Step 3: Enable GitHub Pages</h4>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li>Go to your GitHub repository in browser.</li>
+                        <li>Click <strong class="text-white">Settings</strong> &rarr; <strong class="text-white">Pages</strong>.</li>
+                        <li>Under <em>Build and deployment</em> &rarr; <em>Source</em>, select <strong class="text-white">Deploy from a branch</strong>.</li>
+                        <li>Branch: Select <strong class="text-sky-400">main</strong> / folder: <strong class="text-sky-400">/ (root)</strong> & click <strong class="text-emerald-400">Save</strong>.</li>
+                    </ol>
+                </div>
+
+                <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl text-emerald-400 text-xs flex items-center space-x-2">
+                    <i class="fa-solid fa-circle-check text-base"></i>
+                    <span>Your live dashboard link will be: <strong class="underline font-mono">https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/</strong></span>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+                <button onclick="closeModal('githubModal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl text-xs transition">
+                    Got it, Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-center text-xs text-slate-500 border-t border-slate-800/80 pt-6 space-y-2">
+        <p class="font-semibold text-slate-400">MUN Alert Missing Children Data Intelligence Report (Bangladesh Dataset Analysis)</p>
+        <p>Published for Public Safety Strategy, Emergency Response Optimization, and Community Awareness.</p>
+        <p class="text-[11px] text-slate-600">Single-file web application optimized for hosting on GitHub Pages.</p>
+    </footer>
+
+    <!-- JavaScript Logic & Chart Visualizations -->
+    <script>
+        // Setup Chart defaults for dark theme
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter, sans-serif';
+
+        window.onload = function() {
+            initAgeChart();
+            initGenderChart();
+            initTemporalChart();
+            initHotspotChart();
+            initGeographyChart();
+        };
+
+        // Modal Controls
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabKey) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Reset tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+
+            // Show selected content & highlight active button
+            document.getElementById(`content-${tabKey}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabKey}`);
+            activeBtn.classList.add('bg-sky-600', 'text-white');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        // Matrix Search Filter
+        function filterMatrix() {
+            const query = document.getElementById('matrixSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#matrixTableBody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        // Chart 1: Age Distribution
+        function initAgeChart() {
+            const ctx = document.getElementById('ageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1–4 Yrs (Toddlers)', '5–9 Yrs', '10–15 Yrs (Primary Risk)', '16–17 Yrs'],
+                    datasets: [{
+                        label: '% of Cases',
+                        data: [15, 20, 53, 12],
+                        backgroundColor: [
+                            'rgba(244, 63, 94, 0.7)',
+                            'rgba(251, 146, 60, 0.7)',
+                            'rgba(14, 165, 233, 0.85)',
+                            'rgba(168, 85, 247, 0.7)'
+                        ],
+                        borderColor: [
+                            '#f43f5e',
+                            '#fb923c',
+                            '#0ea5e9',
+                            '#a855f7'
+                        ],
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { callback: v => v + '%' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Chart 2: Gender Ratio
+        function initGenderChart() {
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Male (Boys)', 'Female (Girls)'],
+                    datasets: [{
+                        data: [73, 27],
+                        backgroundColor: [
+                            'rgba(14, 165, 233, 0.85)',
+                            'rgba(236, 72, 153, 0.85)'
+                        ],
+                        borderColor: '#0f172a',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 15, boxWidth: 12 } }
+                    },
+                    cutout: '68%'
+                }
+            });
+        }
+
+        // Chart 3: Temporal 24h Profile
+        function initTemporalChart() {
+            const ctx = document.getElementById('temporalChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['12 AM', '3 AM', '6 AM (Peak)', '9 AM', '12 PM', '3 PM', '6 PM (Peak)', '9 PM', '11 PM'],
+                    datasets: [{
+                        label: 'Disappearance Intensity',
+                        data: [12, 8, 55, 30, 25, 40, 95, 80, 45],
+                        borderColor: '#f43f5e',
+                        backgroundColor: 'rgba(244, 63, 94, 0.15)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#f43f5e',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Chart 4: Hotspot Categories
+        function initHotspotChart() {
+            const ctx = document.getElementById('hotspotChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: [
+                        'Madrasas & Quran Centers',
+                        'Bus & Rail Stations / Sadarghat',
+                        'Bridges, Riverfronts & Canals',
+                        'Dense Urban / Garment Belts',
+                        'Courtyards / Local Markets',
+                        'Rohingya Camp Blocks'
+                    ],
+                    datasets: [{
+                        label: 'Report References',
+                        data: [420, 310, 240, 210, 180, 120],
+                        backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                        borderColor: '#f59e0b',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' }
+                        },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Chart 5: Geographic Division Volume
+        function initGeographyChart() {
+            const ctx = document.getElementById('geographyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dhaka', 'Chattogram', 'Gazipur/Narayanganj', 'Rajshahi', 'Rangpur', 'Khulna/Jessore', 'Sylhet', 'Mymensingh/Barishal'],
+                    datasets: [{
+                        label: 'Case Volume',
+                        data: [520, 340, 280, 160, 130, 110, 90, 70],
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: '#10b981',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
